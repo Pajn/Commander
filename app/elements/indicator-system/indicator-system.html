@@ -1,0 +1,71 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-icons/av-icons.html">
+<link rel="import" href="../../bower_components/core-icons/device-icons.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="indicator-system" attributes="">
+  <template>
+    <link rel="stylesheet" href="indicator-system.css">
+    <paper-button on-click="{{ toggle }}">
+      <core-icon icon="av:volume-up"></core-icon>
+      <core-icon icon="device:signal-wifi-3-bar"></core-icon>
+      <core-icon icon="device:battery-full"></core-icon>
+    </paper-button>
+    <widget-dropdown id="dropdown">
+      <li>
+        <div layout horizontal center>
+          <core-icon icon="av:volume-up"></core-icon> <paper-slider value="50"></paper-slider>
+        </div>
+        <div layout horizontal center>
+          <core-icon icon="device:brightness-low"></core-icon> <paper-slider value="50"></paper-slider>
+        </div>
+      </li>
+      <li>
+        <widget-combobox icon="device:signal-wifi-3-bar" selected="1">
+            <paper-item><core-icon icon="device:signal-wifi-4-bar"></core-icon> Midgård</paper-item>
+            <paper-item><core-icon icon="device:signal-wifi-3-bar"></core-icon> Eduroam</paper-item>
+            <paper-item><core-icon icon="device:signal-wifi-1-bar"></core-icon> Solsidan</paper-item>
+            <paper-button>Wifi Settings</paper-button>
+        </widget-combobox>
+      </li>
+      <li>
+        <card-music></card-music>
+      </li>
+      <li>
+        <div layout horizontal around-justified class="control">
+          <label layout vertical center>
+            <paper-icon-button icon="lock" on-click="{{lock}}"></paper-icon-button>
+            Lock
+          </label>
+          <label layout vertical center>
+            <paper-icon-button icon="settings"></paper-icon-button>
+            Settings
+          </label>
+          <label layout vertical center>
+            <paper-icon-button icon="settings-power"></paper-icon-button>
+            Power
+          </label>
+        </div>
+      </li>
+    </widget-dropdown>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        toggle: function() {
+          this.$.dropdown.toggle();
+        },
+        lock: function () {
+          this.fire('lock-screen');
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

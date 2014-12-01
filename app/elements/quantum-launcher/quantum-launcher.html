@@ -1,0 +1,83 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-pages/core-pages.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="quantum-launcher" attributes="open">
+  <template>
+    <link rel="stylesheet" href="quantum-launcher.css">
+    <div id="launcher"  tabindex="1">
+      <input placeholder="Type to search" value="{{search}}" autofocus id="search">
+      <template if="{{search}}">
+        <main>
+          <launcher-search-apps query="{{search}}"></launcher-search-apps>
+        </main>
+      </template>
+      <template if="{{!search}}">
+        <main>
+          <paper-tabs selected="{{selected}}">
+            <paper-tab>Applications</paper-tab>
+            <paper-tab>Windows</paper-tab>
+            <paper-tab>Workspaces</paper-tab>
+          </paper-tabs>
+
+          <core-pages selected="{{selected}}">
+            <div><launcher-all-apps></launcher-all-apps></div>
+            <div>
+              <h2>
+                Here should a spread of the windows on the current workspace be presented.<br>
+                If there are no windows open the Applications tab should be the default.<br>
+                Now look at the application tab :)
+              </h2>
+            </div>
+            <div><h2>Here should a spread of the workspaces be presented</h2></div>
+          </core-pages>
+        </main>
+      </template>
+      <aside layout vertical center>
+        <launcher-clock></launcher-clock>
+        <div relative>
+          <paper-shadow fit></paper-shadow>
+          <card-music></card-music>
+        </div>
+      </aside>
+    </div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        selected: 1,
+        domReady: function () {
+          this.$.launcher.addEventListener('keydown', this.keydown.bind(this));
+        },
+        keydown: function (event) {
+          switch (event.keyCode) {
+            case 13: // Enter
+              if (!this.search) return;
+              this.shadowRoot.querySelector('launcher-search-apps').accept();
+              this.fire('close');
+              break;
+            case 27: // Escape
+              this.fire('close');
+              break;
+            default:
+              if(document.activeElement.tagName.toLowerCase() != 'input') {
+                this.$.search.focus();
+              }
+              return;
+
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+          }
+        },
+        openChanged: function () {
+          this.$.search.focus();
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

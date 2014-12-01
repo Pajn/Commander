@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+input {
+  color: #eee;
+  background: transparent;
+  border: none;
+
+  &:focus {
+    outline: none;
+  }
+}

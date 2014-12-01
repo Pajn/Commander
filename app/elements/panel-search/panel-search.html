@@ -1,0 +1,118 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-icon/core-icon.html">
+<link rel="import" href="../../bower_components/core-icons/hardware-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="panel-search" attributes="open">
+  <template>
+    <link rel="stylesheet" href="panel-search.css">
+    <paper-icon-button src="/images/quantum-os.png" open?="{{open}}" on-click="{{toggle}}"></paper-icon-button>
+    <!--<input value="{{search}}" on-keydown="{{ keyDown }}" title="Search">-->
+    <!--<template if="{{ results }}">-->
+      <!--<ol>-->
+        <!--<template repeat="{{ result, index in results }}">-->
+          <!--<li selected?="{{ index == selected }}">{{ result.name }}</li>-->
+        <!--</template>-->
+      <!--</ol>-->
+    <!--</template>-->
+    <!--<prompt-cards input="{{ search }}"></prompt-cards>-->
+    <template if="{{ open }}" id="launcher">
+      <quantum-launcher on-close="{{close}}" open?="{{open}}"></quantum-launcher>
+    </template>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      var apps = [
+        {
+          name: 'Chrome',
+          icon: 'hardware:chromecast',
+          tag: 'app-chrome',
+        },
+        {
+          name: 'Settings',
+          icon: 'settings',
+          tag: 'app-settings',
+        },
+      ];
+
+      Polymer({
+        open: false,
+        selected: 0,
+        icon: 'apps',
+        results: [],
+        toggle: function () {
+          this.open = !this.open;
+        },
+        setIcon: function () {
+          if (this.results.length == 0) {
+            this.selected = 0;
+            this.icon = 'apps';
+            return;
+          }
+          this.icon = this.results[this.selected].icon;
+        },
+        searchChanged: function () {
+          if (!this.search) {
+            this.icon = 'apps';
+            this.results = [];
+            return;
+          }
+
+          this.results = apps.filter(
+            function (app) {
+              return app.name.toLowerCase().indexOf(this.search.toLowerCase()) != -1;
+            }.bind(this));
+          this.setIcon();
+        },
+        selectedChanged: function () {
+          if (!this.search) {
+            this.icon = 'apps';
+            return;
+          }
+          this.setIcon();
+          //this.icon = apps[this.selected].icon;
+        },
+        keyDown: function(event) {
+          switch (event.keyCode) {
+            case 13: // Enter
+              //this.$.result.accept();
+              //alert(apps[this.selected].name);
+              var el = document.createElement(this.results[this.selected].tag);
+              document.querySelector('commander-shell::shadow commander-desktop').appendChild(el);
+              break;
+            case 27: // Escape
+              //this.$.result.abort();
+              this.input = '';
+              break;
+            case 38: // Up
+              this.up();
+              break;
+            case 40: // Down
+              this.down();
+              break;
+            default:
+              return;
+          }
+          event.preventDefault();
+          return false;
+        },
+        up: function() {
+          this.selected--;
+          if (this.selected < 0) this.selected = this.results.length - 1;
+        },
+        down: function() {
+          this.selected++;
+          if (this.selected >= this.results.length) this.selected = 0;
+        },
+        close: function () {
+          this.open = false;
+        }
+
+      });
+
+    })();
+  </script>
+</polymer-element>

@@ -1,0 +1,44 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-collapse/core-collapse.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<polymer-element name="widget-combobox" attributes="selected">
+  <template>
+    <link rel="stylesheet" href="widget-combobox.css">
+    <paper-button id="button" on-click="{{toggle}}"></paper-button>
+    <core-collapse id="collapse" class="core-collapse-closed">
+      <content id="content" on-click="{{click}}"></content>
+    </core-collapse>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        toggle: function () {
+          this.$.collapse.toggle();
+        },
+        selectedChanged: function () {
+          var selected = this.querySelectorAll('paper-item')[this.selected];
+          this.$.button.innerHTML = selected.innerHTML;
+        },
+        click: function (event) {
+          var target = event.target;
+          while (target.tagName != 'PAPER-ITEM') {
+            target = target.parentNode;
+            if (target == this.$.content) return;
+          }
+
+          var i = 0;
+          while((target = target.previousSibling) != null) {
+            if (target.tagName == 'PAPER-ITEM') i++;
+          }
+          this.selected = i;
+
+          this.$.collapse.opened = false;
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

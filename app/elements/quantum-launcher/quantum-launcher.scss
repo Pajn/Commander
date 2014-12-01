@@ -1,0 +1,86 @@
+:host {
+  display: block;
+  position: fixed;
+  top: -100vw;
+  left: -100vw;
+  width: 200vw;
+  height: 200vw;
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  transition: width 1s, height 1s;
+  
+}
+
+:host([open]) {
+  width: 200vw;
+  height: 200vw;
+}
+
+#launcher {
+  position: absolute;
+  top: 100vw;
+  left: 100vw;
+
+  width: 100vw;
+  height: 100vh;
+
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.7);
+
+  z-index: 1001;
+
+  input {
+    position: absolute;
+    top: 1.1rem;
+    left: 5rem;
+
+    padding: 0.2rem 0.4rem;
+
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    border-radius: 2px;
+
+    font-size: 2rem;
+
+    &:focus, &:active {
+      outline: none;
+    }
+  }
+
+  main {
+    position: absolute;
+    top: 4rem;
+    left: 1rem;
+
+    width: 60%;
+
+    h2 {
+      text-align: center;
+    }
+  }
+
+  aside {
+    position: absolute;
+    top: 4rem;
+    left: calc(60% + 2rem);
+
+    width: calc(40% - 3rem);
+
+    div {
+      width: 60%;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 2px;
+    }
+  }
+}
+
+paper-tabs::shadow #selectionBar {
+  background-color: #ff4081;
+}
+
+paper-tabs paper-tab::shadow #ink {
+  color: #ff4081;
+}

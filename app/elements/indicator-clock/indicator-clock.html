@@ -1,0 +1,104 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="indicator-clock" attributes="">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+
+      paper-button::shadow .button-content {
+        padding: 0 0.25rem;
+      }
+
+      ul {
+        padding: 0;
+        list-style: none;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      li {
+        width: 10rem;
+        position: relative;
+        clear: right;
+      }
+
+      .clear {
+        clear: both;
+      }
+
+      sup {
+        float: right;
+      }
+    </style>
+    <paper-button>
+      {{ hours | zeroPad }}:{{ minutes | zeroPad }}
+    </paper-button>
+    <widget-dropdown id="dropdown" layout horizontal>
+      <div>
+        <template if="{{!events}}">
+          <p>No events</p>
+        </template>
+        <ul>
+          <template repeat="{{event in events}}">
+            <li>
+              <sup>{{event.day}} {{event.time}}</sup>
+              <span class="clear"></span>
+              {{event.name}}
+            </li>
+          </template>
+        </ul>
+      </div>
+    </widget-dropdown>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      var interval, timeout;
+
+      function repeatEvery(func, interval) {
+        // Check current time and calculate the delay until next interval
+        var now = new Date();
+        var delay = interval - now % interval;
+
+        // Delay execution until it's an even interval
+        timeout = setTimeout(function start() {
+          func();
+          interval = setInterval(func, interval);
+        }, delay);
+      }
+
+      Polymer({
+        events: [
+          {name: 'Test', time:'10:42'}, {name:'Test 2', time: '14:12'},
+          {name: 'Test', time:'10:42', day: 'Tomorrow'}, {name:'Test 2', time: '14:12', day: 'Friday'}
+        ],
+        domReady: function() {
+          this.updateTime();
+          repeatEvery(this.updateTime.bind(this), 60000);
+        },
+        detached: function() {
+          clearTimeout(timeout);
+          clearInterval(interval);
+        },
+        updateTime: function() {
+          var time = new Date();
+          this.hours = time.getHours();
+          this.minutes = time.getMinutes();
+        },
+        zeroPad: function(input) {
+          input = input || 0;
+          if (+input < 10 == 1) return '0' + input;
+          return input;
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

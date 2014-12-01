@@ -1,0 +1,70 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-header-panel/core-header-panel.html">
+<link rel="import" href="../../bower_components/core-toolbar/core-toolbar.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/paper-shadow/paper-shadow.html">
+
+<polymer-element name="commander-window" attributes="width height color name">
+  <template>
+    <link rel="stylesheet" href="commander-window.css">
+    <div class="window" _style="width: {{width}}px; height: {{height}}px">
+      <paper-shadow></paper-shadow>
+      <div class="decoration">
+        <button relative on-click="{{close}}">
+          <paper-ripple fit></paper-ripple>
+          &times;
+        </button>
+        <button relative>
+          <paper-ripple fit></paper-ripple>
+          &square;
+        </button>
+        <button relative>
+          <paper-ripple fit></paper-ripple>
+          &dash;
+        </button>
+      </div>
+      <core-header-panel flex>
+        <core-toolbar class="medium-tall" _style="background-color: {{color}}">
+          <div class="bottom">
+            {{name}}
+          </div>
+        </core-toolbar>
+      </core-header-panel>
+    </div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        domReady: function () {
+          var self = this;
+          this.id = Math.random();
+          this.fire('register-commands', {
+            id: this.id,
+            namespace: 'Windows',
+            commands: [
+              {
+                command: 'Close ' + this.title,
+                callback: function() {self.close()}
+              },
+              {
+                command: 'Maximize ' + this.title,
+                callback: function() {}
+              },
+              {
+                command: 'Minimize ' + this.title,
+                callback: function() {}
+              },
+            ]
+          });
+        },
+        close: function () {
+          this.fire('unregister-commands', this.id);
+          this.fire('close');
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

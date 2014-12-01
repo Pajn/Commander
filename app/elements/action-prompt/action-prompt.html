@@ -1,0 +1,40 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="action-prompt" attributes="">
+  <template>
+    <link rel="stylesheet" href="action-prompt.css">
+    <span>&gt;</span>
+    <input title="Command Prompt" placeholder="_" autofocus value="{{ input }}" on-keydown="{{ keyDown }}">
+    <prompt-result id="result" input="{{ input }}"></prompt-result>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        keyDown: function(event) {
+          switch (event.keyCode) {
+            case 13: // Enter
+              this.$.result.accept();
+              break;
+            case 27: // Escape
+              this.$.result.abort();
+              break;
+            case 38: // Up
+              this.$.result.up();
+              break;
+            case 40: // Down
+              this.$.result.down();
+              break;
+            default:
+              return;
+          }
+          event.preventDefault();
+          return false;
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

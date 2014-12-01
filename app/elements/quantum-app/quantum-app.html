@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="quantum-app" attributes="name color icon">
+  <template>
+    <link rel="stylesheet" href="quantum-app.css">
+    <commander-window width="600" height="400" color="{{colors[color]}}" name="{{name}}" on-close="{{close}}"></commander-window>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        colors: {
+          red: '#F44336',
+          pink: '#e91e63',
+          purple: '#9c27b0',
+          deepPurple: '#673ab7',
+          indigo: '#3f51b5',
+          blue: '#2196f3',
+          lightBlue: '#03a9f4',
+          green: '#4caf50',
+          grey: '#9e9e9e',
+          lightGreen: '#8bc34a',
+          yellow: '#ffeb3b',
+          amber: '#ffc107',
+          orange: '#ff9800',
+        },
+        close: function () {
+          this.fire('window-focus', {
+            name: undefined,
+          });
+          this.remove();
+          setTimeout(
+            function () {
+              var apps = document.querySelectorAll('commander-shell::shadow commander-desktop quantum-app');
+              if (apps.length) {
+                apps[apps.length - 1].fire(
+                  'window-focus', {
+                    name: apps[apps.length - 1].name,
+                    icon: apps[apps.length - 1].icon,
+                  }
+                );
+              }
+            }.bind(this), 0);
+        },
+        domReady: function () {
+          this.fire('window-focus', {
+            name: this.name,
+            icon: this.icon,
+          });
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

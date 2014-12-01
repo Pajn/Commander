@@ -1,0 +1,39 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="prompt-cards" attributes="input">
+  <template>
+    <link rel="stylesheet" href="prompt-cards.css">
+    <ol id="ol">
+    </ol>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        cards: [],
+        inputChanged: function() {
+          if (!this.$.ol) return;
+          this.$.ol.innerHTML = '';
+          if (!this.input) return;
+
+          this.cards.filter(function (card) {
+            return card.name.toLowerCase().indexOf(this.input.toLowerCase()) != -1;
+          }.bind(this))
+          .forEach(function (card) {
+            this.$.ol.appendChild(card.element);
+          }.bind(this))
+        },
+        attached: function() {
+          document.addEventListener('register-card', function (event) {
+            this.cards.push({
+              name: event.detail.name,
+              element: document.createElement(event.detail.tag),
+            });
+          }.bind(this));
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

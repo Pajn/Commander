@@ -1,0 +1,47 @@
+:host {
+  display: block;
+
+  margin-left: 2.5rem;
+}
+
+.app {
+  span {
+    position: absolute;
+    transition: opacity 0.3s;
+  }
+
+  .name {
+    opacity: 1;
+  }
+
+  .menu {
+    opacity: 0;
+
+    button {
+      color: white;
+      background: transparent;
+      border: none;
+
+      &:active, &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  &:hover {
+    .name {
+      opacity: 0;
+    }
+
+    .menu {
+      opacity: 1;
+    }
+  }
+}
+
+core-icon {
+  margin-right: 4px !important;
+  padding: 0 !important;
+  height: 20px !important;
+  width: 20px !important;
+}

@@ -1,0 +1,62 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="commander-panel" attributes="">
+  <template>
+    <style>
+      :host {
+        display: block;
+
+        box-sizing: border-box;
+        //padding: 0 10px;
+        width: 100%;
+        height: 28px;
+
+        color: #eee;
+        background-color: rgba(0,0,0,0.6);
+
+        line-height: 28px;
+
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+
+      ::shadow paper-icon-button,
+      ::shadow paper-button::shadow .button-content {
+        padding: 0 0.25rem;
+      }
+
+      ::shadow paper-icon-button::shadow core-icon[role=img],
+      ::shadow paper-button core-icon {
+        height: 20px;
+        width: 20px;
+        padding: 0;
+        margin: 4px;
+      }
+    </style>
+    <div layout vertical>
+      <panel-search flex self-start hidden?="{{!search}}" open="{{open}}"></panel-search>
+      <panel-action flex self-start hidden?="{{search}}"></panel-action>
+      <panel-application flex self-start hidden?="{{!search || open}}"></panel-application>
+      <indicator-clock flex self-center on-click="{{click}}"></indicator-clock>
+      <indicators-area flex self-end></indicators-area>
+    </div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        open: false,
+        search: true,
+        click: function () {
+          this.search = !this.search;
+        },
+      });
+
+    })();
+  </script>
+</polymer-element>

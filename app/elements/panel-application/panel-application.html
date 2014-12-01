@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-icon/core-icon.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+
+<polymer-element name="panel-application" attributes="">
+  <template>
+    <link rel="stylesheet" href="panel-application.css">
+    <!--<core-icon src="{{appIcon}}"></core-icon>-->
+    <span class="app">
+      <span class="name">{{appName}}</span>
+      <span class="menu" hidden?="{{appName == 'Quantum OS'}}">
+        <button relative on-click="{{close}}">
+          <paper-ripple fit></paper-ripple>
+          &times;
+        </button>
+        <button relative>
+          <paper-ripple fit></paper-ripple>
+          &square;
+        </button>
+        <button relative>
+          <paper-ripple fit></paper-ripple>
+          &dash;
+        </button>
+        <button relative>
+          <paper-ripple fit></paper-ripple>
+          File
+        </button>
+        <button relative>
+          <paper-ripple fit></paper-ripple>
+          Edit
+        </button>
+        <button relative>
+          <paper-ripple fit></paper-ripple>
+          View
+        </button>
+        <button relative>
+          <paper-ripple fit></paper-ripple>
+          Window
+        </button>
+        <button relative>
+          <paper-ripple fit></paper-ripple>
+          Help
+        </button>
+      </span>
+    </span>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        appName: 'Quantum OS',
+        domReady: function () {
+          document.addEventListener('window-focus', function (event) {
+            this.appName = event.detail.name || 'Quantum OS';
+            this.appIcon = event.detail.icon;
+          }.bind(this));
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

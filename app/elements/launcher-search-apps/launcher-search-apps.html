@@ -1,0 +1,27 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="launcher-search-apps" attributes="query">
+  <template>
+    <link rel="stylesheet" href="launcher-search-apps.css">
+    <widget-app-grid apps="{{result}}" id="apps"></widget-app-grid>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        queryChanged: function () {
+          this.result = window.allApps.filter(
+            function (app) {
+              return app.name.toLowerCase().indexOf(this.query.toLowerCase()) != -1;
+            }.bind(this))
+        },
+        accept: function () {
+          this.$.apps.accept();
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

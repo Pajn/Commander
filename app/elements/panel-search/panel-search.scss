@@ -1,0 +1,39 @@
+:host {
+  display: block;
+}
+
+paper-icon-button {
+  z-index: 1002;
+  transition: margin-top 0.3s;
+
+  &::shadow core-icon {
+    transition: width 0.3s, height 0.3s;
+  }
+
+  &[open] {
+    margin-top: 0.5rem;
+
+    &::shadow core-icon {
+      width: 48px !important;
+      height: 48px !important;
+    }
+  }
+}
+
+input {
+  color: #eee;
+  background: transparent;
+  border: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+ol {
+  background-color: rgba(0,0,0,0.6);
+
+  [selected] {
+    background-color: rgba(255,255,255,0.15);
+  }
+}

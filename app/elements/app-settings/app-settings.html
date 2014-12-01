@@ -1,0 +1,21 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="app-settings" attributes="">
+  <template>
+    <link rel="stylesheet" href="app-settings.css">
+    <commander-window width="400" height="400" color="#9E9E9E" title="Settings" on-close="{{close}}"></commander-window>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        close: function () {
+          this.remove();
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

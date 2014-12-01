@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  color: #ffffff;
+}
+
+.clock {
+  position: relative;
+  padding-bottom: 1rem;
+
+  .time {
+    margin: 0;
+    padding: 4rem 0;
+    font-size: 6rem;
+  }
+
+  .date {
+    position: absolute;
+    right: 1rem;
+    bottom: 0;
+  }
+}
+

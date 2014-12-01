@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+
+div {
+  color: #333;
+
+  button {
+    background: transparent;
+    border: none;
+
+    &:active, &:focus {
+      outline: none;
+    }
+
+    core-icon {
+      margin: 0 2rem;
+
+      width: 64px;
+      height: 64px;
+
+      pointer-events: none;
+    }
+  }
+}

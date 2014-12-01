@@ -1,0 +1,154 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-animation/core-animation.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/paper-shadow/paper-shadow.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="quantum-lockscreen" attributes="">
+  <template>
+    <link rel="stylesheet" href="quantum-lockscreen.css">
+    <div class="lockscreen" layout vertical center-center hidden?="{{!locked}}">
+      <commander-panel></commander-panel>
+      <div id="card" layout vertical relative>
+        <paper-shadow fit></paper-shadow>
+
+        <div layout vertical flex>
+          <h3 relative on-click="{{selectUser}}">
+            <paper-ripple fit></paper-ripple>
+            <core-icon icon="account-circle"></core-icon>Rasmus Eneman
+          </h3>
+          <h3 hidden relative on-click="{{selectUser}}">
+            <paper-ripple fit></paper-ripple>
+            <core-icon icon="account-circle"></core-icon>Other User
+          </h3>
+          <h3 hidden relative on-click="{{selectUser}}">
+            <paper-ripple fit></paper-ripple>
+            <core-icon icon="account-circle"></core-icon>Yet Another
+          </h3>
+          <h3 hidden relative on-click="{{selectUser}}">
+            <paper-ripple fit></paper-ripple>
+            <core-icon icon="account-circle"></core-icon>And a fourth
+          </h3>
+          <paper-input label="Password" type="password" id="password"></paper-input>
+        </div>
+
+        <div layout horizontal justified id="buttons">
+          <paper-button on-click="{{changeUser}}">Change User</paper-button>
+          <paper-button raised on-click="{{unlock}}">Unlock</paper-button>
+        </div>
+      </div>
+    </div>
+    <core-animation id="fade" duration="500">
+      <core-animation-keyframe>
+        <core-animation-prop name="opacity" value="0"></core-animation-prop>
+      </core-animation-keyframe>
+      <core-animation-keyframe>
+        <core-animation-prop name="opacity" value="1"></core-animation-prop>
+      </core-animation-keyframe>
+    </core-animation>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      var userTop;
+
+      var elementHidden = function () {
+        event.target.setAttribute('hidden', true);
+        event.target.removeEventListener(event.type, elementHidden);
+      }.bind(this);
+
+      Polymer({
+        locked: false,
+        domReady: function () {
+          document.addEventListener('lock-screen', function () {
+            this.locked = true;
+          }.bind(this));
+        },
+        unlock: function () {
+          this.locked = false;
+        },
+        changeUser: function () {
+          var passwordHidden = function () {
+            event.target.setAttribute('hidden', true);
+            event.target.removeEventListener(event.type, passwordHidden);
+
+            var users = this.$.card.querySelectorAll('h3');
+            userTop = users[0].getBoundingClientRect().top;
+            this.fadeInUsers(users[1]);
+            this.$.card.style.height = (users.length * 80) + 'px';
+          }.bind(this);
+          this.$.buttons.addEventListener('transitionend', elementHidden);
+          this.$.password.addEventListener('transitionend', passwordHidden);
+
+          this.$.card.classList.add('change');
+        },
+        fadeInUsers: function(element) {
+          if (element.tagName.toLowerCase() == 'h3') {
+            element.removeAttribute('hidden');
+            this.$.fade.direction = 'normal';
+            this.$.fade.target = element;
+            this.$.fade.play();
+            setTimeout(function () {
+              this.fadeInUsers(element.nextElementSibling);
+            }.bind(this), 200);
+          }
+        },
+        fadeOutUser: function(element) {
+          var elementHidden = function () {
+            element.setAttribute('hidden', true);
+            event.target.removeEventListener(event.type, elementHidden);
+          }.bind(this);
+          this.$.fade.addEventListener('core-animation-finish', elementHidden);
+          this.$.fade.direction = 'reverse';
+          this.$.fade.target = element;
+          this.$.fade.play();
+        },
+        selectUser: function(event) {
+          var users = this.$.card.querySelectorAll('h3');
+          for (var i = users.length - 1; i >= 0; i--) {
+            var rect = users[i].getBoundingClientRect();
+            users[i].style.position = 'fixed';
+            users[i].style.top = rect.top + 'px';
+            users[i].style.width = rect.width + 'px';
+
+            if (users[i] !== event.currentTarget) {
+              this.fadeOutUser(users[i]);
+            }
+          }
+
+          var user = event.currentTarget;
+          var top = user.getBoundingClientRect().top;
+
+          //alert('Animate '+top+' to '+userTop);
+
+          var animation = new CoreAnimation();
+          animation.duration = 500;
+          animation.keyframes = [
+            {top: top+'px'},
+            {top: userTop+'px'}
+          ];
+          animation.target = user;
+          animation.play();
+          this.$.card.style.height = '200px';
+          animation.addEventListener('core-animation-finish', function () {
+            for (var i = users.length - 1; i >= 0; i--) {
+              users[i].style.position = 'relative';
+              users[i].style.top = 0;
+            }
+            var parent = user.parentElement;
+            user.remove();
+            parent.insertBefore(user, parent.firstChild);
+          }.bind(this));
+
+          this.$.buttons.removeAttribute('hidden');
+          this.$.password.removeAttribute('hidden');
+          this.$.card.classList.remove('change');
+        },
+      });
+
+    })();
+  </script>
+</polymer-element>

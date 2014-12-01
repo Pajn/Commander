@@ -1,0 +1,21 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="app-chrome" attributes="">
+  <template>
+    <link rel="stylesheet" href="app-chrome.css">
+    <commander-window width="600" height="400" color="#F44336" title="Chrome" on-close="{{close}}"></commander-window>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        close: function () {
+          this.remove();
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

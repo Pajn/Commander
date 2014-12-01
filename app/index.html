@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Commander</title>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    html /deep/ paper-slider::shadow #sliderBar::shadow #activeProgress {
+      background-color: #e91e63;
+    }
+
+    html /deep/ paper-slider::shadow #sliderKnobInner {
+      background-color: #e91e63;
+    }
+  </style>
+  <!-- endbuild-->
+
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+  <!-- build:vulcanized elements/elements.vulcanized.html -->
+  <link rel="import" href="elements/elements.html">
+  <!-- endbuild-->
+</head>
+
+<body unresolved fullbleed>
+  <commander-shell></commander-shell>
+  <service-music></service-music>
+  <script src="bower_components/lodash/dist/lodash.min.js"></script>
+  <!-- build:js scripts/app.js -->
+  <script src="scripts/app.js"></script>
+  <!-- endbuild-->
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+
+paper-button {
+  display: block;
+  margin: 0;
+  text-transform: none;
+
+  &::shadow .button-content[layout] {
+    justify-content: flex-start;
+    padding: 0;
+  }
+
+  core-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+::content {
+  core-icon {
+    margin-right: 0.5rem;
+  }
+
+  paper-item::shadow .button-content[layout] {
+    padding: 0 0.5rem;
+  }
+
+  paper-button {
+    display: block;
+
+    &::shadow .button-content[layout] {
+      justify-content: flex-start;
+      padding: 0 0.5rem;
+    }
+  }
+}

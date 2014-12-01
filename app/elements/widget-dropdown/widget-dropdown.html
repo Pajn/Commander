@@ -1,0 +1,41 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="widget-dropdown">
+  <template>
+    <link rel="stylesheet" href="widget-dropdown.css">
+    <div id="dropdown" open?="{{ isOpen }}" hidden?="{{ !show }}">
+      <p pointer></p>
+      <ul>
+        <content></content>
+      </ul>
+    </div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        isOpen: false,
+        show: false,
+        toggle: function () {
+          this.isOpen ? this.close() : this.open();
+        },
+        open: function() {
+          this.show = true;
+          requestAnimationFrame(function() {
+            this.isOpen = true;
+          }.bind(this));
+        },
+        close: function() {
+          this.isOpen = false;
+        },
+        domReady: function () {
+          this.$.dropdown.addEventListener('transitionend', function() {
+            if (!this.isOpen) this.show = false;
+          }.bind(this));
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

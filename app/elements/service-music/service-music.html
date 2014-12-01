@@ -1,0 +1,143 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="service-music" attributes="info">
+  <script>
+    (function () {
+      'use strict';
+
+      var self;
+      var artist, song, albumArt, playlist;
+      var index = 0;
+
+      Polymer({
+        get playing() { return self.audio && !self.audio.paused; },
+        play: function() {self.audio.play(); self.update();},
+        pause: function() {self.audio.pause(); self.update();},
+        next: function() {
+          var next = index++;
+          if (next >= playlist.length) next = 0;
+          self.playTrack(next)
+        },
+        prev: function() {
+          var prev = index--;
+          if (prev < 0) prev = playlist.length - 1;
+          self.playTrack(prev)
+        },
+        update: function () {
+          self.fire('music-update', {
+            artist: artist,
+            song: song,
+            albumArt: albumArt,
+            playing: self.playing,
+          });
+        },
+        playTrack: function (index) {
+          self.pause();
+          self.currentTime = 0;
+          self.audio.setAttribute('src', playlist[index].src);
+          artist = playlist[index].artist;
+          song = playlist[index].song;
+          albumArt = '/images/AntarhesBreathinAgain.jpg';
+          self.play();
+          self.update();
+        },
+        domReady: function() {
+          if (window.serviceMusicComponent) {
+            self = window.serviceMusicComponent;
+          } else {
+            window.serviceMusicComponent = self = this;
+            self.audio = document.createElement('audio');
+            self.audio.addEventListener('ended', function () {
+              self.next();
+            });
+
+            playlist = [
+              {
+                artist: 'Antarhes',
+                song: 'Different Way',
+                src: '/assets/01%20-%20Antarhes%20-%20Different%20Way.mp3',
+              },
+              {
+                artist: 'Antarhes',
+                song: 'Stll Fighting',
+                src: '/assets/02%20-%20Antarhes%20-%20Stll%20Fighting.mp3',
+              },
+              {
+                artist: 'Antarhes',
+                song: 'Stay Away',
+                src: '/assets/03%20-%20Antarhes%20-%20Stay%20Away.mp3',
+              },
+              {
+                artist: 'Antarhes',
+                song: 'Nowhere',
+                src: '/assets/04%20-%20Antarhes%20-%20Nowhere.mp3',
+              },
+              {
+                artist: 'Antarhes',
+                song: 'Voodoo Dream',
+                src: '/assets/05%20-%20Antarhes%20-%20Voodoo%20Dream.mp3',
+              },
+              {
+                artist: 'Antarhes',
+                song: 'She Told Me',
+                src: '/assets/06%20-%20Antarhes%20-%20She%20Told%20me.mp3',
+              },
+              {
+                artist: 'Antarhes',
+                song: 'Breathin\' Again',
+                src: '/assets/07%20-%20Antarhes%20-%20Breathin_%20Again%20_dmo%20version_.mp3',
+              },
+            ];
+
+            document.addEventListener('music-control', function (event) {
+              switch (event.detail) {
+                case 'pause':
+                  this.pause();
+                  break;
+                case 'play':
+                  this.play();
+                  break;
+                case 'next':
+                  this.next();
+                  break;
+                case 'previous':
+                  this.prev();
+                  break;
+              }
+            }.bind(this));
+
+            this.fire('register-commands', {
+              namespace: 'Music',
+              commands: [
+                {
+                  command: 'Play',
+                  callback: function() {self.play()}
+                },
+                {
+                  command: 'Pause',
+                  callback: function() {self.pause()}
+                },
+                {
+                  command: 'Next',
+                  callback: function() {self.next()}
+                },
+                {
+                  command: 'Previous',
+                  callback: function() {self.prev()}
+                },
+              ]
+            });
+
+            this.fire('register-card', {
+              name: 'Music',
+              tag: 'card-music',
+            });
+          }
+
+          setTimeout(self.update, 0);
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

@@ -1,0 +1,116 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="prompt-result" attributes="input">
+  <template>
+    <link rel="stylesheet" href="prompt-result.css">
+    <template if="{{ input }}">
+      <ol>
+        <template repeat="{{ result, index in input | getResults }}">
+          <li selected?="{{ index == selected }}">{{ result.command }}</li>
+        </template>
+      </ol>
+    </template>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      var a = {
+        'Music': {
+          'Play': function() {alert('playing')},
+          'Pause': function() {alert('pausing')},
+          'Next': function() {alert('skipping')},
+          'Previous': function() {alert('going back')},
+        },
+        'Refresh': function() {alert('reloading')},
+        'Show Desktop': function() {alert('showing desktop')},
+      };
+
+      var registeredCommands = {};
+
+      function commands(a) {
+        var c = [];
+        _.forIn(a, function(value, key) {
+          if (value['callback'] != undefined) {
+            c.push({
+              command: value.command,
+              callback: value.callback,
+            });
+          } else {
+            c = c.concat(
+              commands(value)
+                .map(function(command) {
+                  command.command = key + ' > ' + command.command;
+                  return command;
+                })
+            );
+          }
+        });
+        return c;
+      }
+
+      Polymer({
+        selected: 0,
+        attached: function() {
+          document.addEventListener('register-commands', function(event) {
+            var namespace = event.detail.namespace;
+            var id = event.detail.id;
+            registeredCommands[namespace] = event.detail.commands;
+            registeredCommands[namespace].forEach(function(command) {
+              command.id = id;
+            });
+            //alert(event.detail.commands);
+          });
+          document.addEventListener('unregister-commands', function(event) {
+            var namespaces = Object.keys(registeredCommands);
+            namespaces.forEach(
+              function (namespace) {
+                registeredCommands[namespace] = registeredCommands[namespace].filter(
+                  function (command) {
+                    return command.id != event.detail;
+                  });
+              });
+            this.input = '';
+          }.bind(this));
+        },
+        getResults: function(input) {
+          var results = registeredCommands;
+          var steps = input.match(/([a-z0-9 ]+)>/i);
+          if (steps) {
+            var groups = Object.keys(results)
+              .filter(function(name) {
+                return name.toLowerCase().indexOf(steps[1].toLowerCase()) != -1;
+              });
+            if (groups.length > 1) {
+              results = {};
+              groups.forEach(function(group) {
+                results[group] = results[group];
+              });
+            } else {
+              results = results[groups[0]];
+            }
+            input = input.substr(steps[0].length);
+          }
+          return commands(results).filter(function(a) {
+            return a.command.toLowerCase().indexOf(input.toLowerCase()) != -1;
+          });
+        },
+        accept: function() {
+          this.getResults(this.input)[this.selected].callback();
+        },
+        abort: function() {
+          this.input = '';
+        },
+        up: function() {
+          this.selected--;
+          if (this.selected < 0) this.selected = this.getResults(this.input).length - 1;
+        },
+        down: function() {
+          this.selected++;
+          if (this.selected >= this.getResults(this.input).length) this.selected = 0;
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>

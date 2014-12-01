@@ -1,0 +1,32 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-icons/av-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="indicator-sound" attributes="">
+  <template>
+    <link rel="stylesheet" href="indicator-sound.css">
+    <paper-icon-button icon="av:volume-up" on-click="{{ toggle }}"></paper-icon-button>
+    <widget-dropdown id="dropdown">
+      <li>
+        <paper-slider value="50"></paper-slider>
+      </li>
+      <li>
+        <card-music></card-music>
+      </li>
+    </widget-dropdown>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        toggle: function() {
+          this.$.dropdown.toggle();
+        },
+      });
+
+    })();
+  </script>
+</polymer-element>

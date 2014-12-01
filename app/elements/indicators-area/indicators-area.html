@@ -1,0 +1,40 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="indicators-area" attributes="">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      ::shadow paper-icon-button,
+      ::shadow paper-button::shadow .button-content {
+        padding: 0 0.25rem;
+      }
+
+      ::shadow paper-icon-button::shadow core-icon[role=img],
+      ::shadow paper-button core-icon {
+         height: 20px;
+         width: 20px;
+         padding: 0;
+         margin: 4px;
+       }
+    </style>
+    <div layout horizontal>
+      <!--<indicator-sound></indicator-sound>-->
+      <!--<indicator-battery></indicator-battery>-->
+      <indicator-system></indicator-system>
+    </div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        // define element prototype here
+      });
+
+    })();
+  </script>
+</polymer-element>

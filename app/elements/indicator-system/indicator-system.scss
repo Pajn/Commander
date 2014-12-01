@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+
+paper-button {
+  margin: 0;
+
+  &::shadow .button-content {
+    padding: 4px 0;
+  }
+}
+
+widget-dropdown>li>div>core-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.control {
+  margin-top: 0.5rem;
+  margin-bottom: -1rem;
+
+  label {
+    color: transparent;
+
+    transition: color 0.3s;
+
+    &:hover {
+      color: white;
+    }
+
+    paper-icon-button {
+      margin-bottom: -0.5rem;
+      color: white;
+    }
+  }
+}

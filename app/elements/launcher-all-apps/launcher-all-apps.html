@@ -1,0 +1,40 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../elements.html">
+
+<polymer-element name="launcher-all-apps" attributes="">
+  <template>
+    <link rel="stylesheet" href="launcher-all-apps.css">
+    <template repeat="{{category in categories}}">
+      <h2>{{category.name}}</h2>
+      <widget-app-grid apps="{{category.apps}}"></widget-app-grid>
+    </template>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        get categories() {
+          var categories = [];
+          window.allApps.forEach(
+            function (app) {
+              var category = categories.filter(
+                function (category) {
+                  return category.name == app.category;
+                })[0];
+              if (!category) {
+                category = {
+                  name: app.category,
+                  apps: [],
+                };
+                categories.push(category);
+              }
+              category.apps.push(app);
+            });
+          return categories;
+        },
+      });
+
+    })();
+  </script>
+</polymer-element>

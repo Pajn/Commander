@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-icon/core-icon.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+
+<polymer-element name="widget-app-grid" attributes="apps">
+  <template>
+    <link rel="stylesheet" href="widget-app-grid.css">
+    <div layout horizontal wrap>
+      <template repeat="{{app, index in apps}}">
+        <button layout vertical center relative>
+          <paper-ripple fit on-click="{{click}}" data-index="{{index}}"></paper-ripple>
+          <core-icon src="{{app.icon}}"></core-icon>
+          {{app.name}}
+        </button>
+      </template>
+    </div>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        apps: [],
+        accept: function () {
+          this.launch(0);
+        },
+        click: function (event) {
+          this.launch(event.target.getAttribute('data-index'));
+        },
+        launch: function (index) {
+          var el = document.createElement('quantum-app');
+          el.setAttribute('name', this.apps[index].name);
+          el.setAttribute('color', this.apps[index].color);
+          el.setAttribute('icon', this.apps[index].icon);
+          document.querySelector('commander-shell::shadow commander-desktop').appendChild(el);
+
+          this.fire('close');
+        }
+      });
+
+    })();
+  </script>
+</polymer-element>
